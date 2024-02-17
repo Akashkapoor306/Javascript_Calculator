@@ -1,2 +1,2 @@
-Odin Project 
+Odin Project: 
 Javascript Calculator
