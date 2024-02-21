@@ -5,6 +5,11 @@ body
     align-items: center;
     justify-content: space-between;
     margin-top: 120px;
+    background-color:#8E7AB5;
+}
+h1
+{
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 .container {
     width: 300px;
@@ -13,6 +18,7 @@ body
     background-color: #fff;
     padding: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border: 5px solid #E493B3;
   }
 
   .display {
@@ -25,12 +31,14 @@ body
     border-radius: 5px;
     margin-bottom: 10px;
     overflow: auto; 
+    border: 5px solid #EEA5A6;
   }
 
   .buttons {
     display: grid;
     grid-template-columns: repeat(3, 3fr);
     gap: 5px;
+   
   }
   
   button {
@@ -41,6 +49,7 @@ body
     border-radius: 5px;
     cursor: pointer;
     background-color: #f1f1f1;
+    border: 5px solid #E493B3;
   }
   
   button:hover {

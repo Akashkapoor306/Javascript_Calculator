@@ -2,109 +2,190 @@ const buttons = document.querySelectorAll('.btn');
 const operators = document.querySelectorAll('.operator');
 const equal = document.querySelector('.equal');
 const clearButton = document.querySelector('.clear');
-const display = document.querySelector('.display');
+const currentDisplayElement = document.querySelector('.currentDisplay');
+const previousDisplayElement = document.querySelector('.previousDisplay');
+const decimal =  document.querySelector('.decimal');
+const backspace = document.querySelector('.back');
 
-let firstNumber = 0;
+let currentNumber = "";
 let operator = "";
-let secondNUmber = 0;
+let previousNumber = "";
 
-function sum(num1,num2)
+//Event Listener
+buttons.forEach(button => button.addEventListener('click',(e) => {
+    buttonValve(e.target.textContent);
+}));
+operators.forEach(operator => operator.addEventListener('click',(e) =>{
+    operatorSelect(e.target.textContent)
+}));
+clearButton.addEventListener('click',resetValues)
+equal.addEventListener('click',() => {
+    if(currentNumber != "" && previousNumber != "")
+    {
+        calulationOperator();
+    }
+});
+decimal.addEventListener('click',addDecimal);
+backspace.addEventListener('click',removeValue)
+
+
+//All Function
+
+function calulationOperator()
 {
-    return num1 + num2;
-}
-
-function subtract(num1,num2)
-{
-
-    return num1 - num2;
-}
-
-function multiply(num1,num2)
-{
-    return num1 * num2
-}
-
-function divide(num1,num2)
-{
-    return num1/num2;
-}
-
-
-function calulationOperator(operator,num1,num2)
-{
-    num1 = Number(num1);
-    num2 = Number(num2);
+    previousNumber = Number(previousNumber);
+    currentNumber = Number(currentNumber);
 
     switch(operator)
     {
         case "+":
-            display.textContent = sum(num1,num2);
-            console.log(sum(num1,num2));
+            previousNumber = previousNumber + currentNumber;
             break
         case "-":
-            display.textContent = subtract(num1,num2);
-            console.log(subtract(num1,num2));
+            previousNumber = previousNumber - currentNumber;
             break;
         case "*":
-            display.textContent = multiply(num1,num2);
-            console.log(multiply(num1,num2));
+            previousNumber = previousNumber * currentNumber;
             break;
         case "/":
-            display.textContent = divide(num1,num2);
-            console.log(divide(num1,num2));
+            if(currentNumber<=0)
+            {
+                previousNumber = 'Error';
+                updatePreviousDisplay('');
+                updatecurrentDisplay(previousNumber);
+                operator = '';
+                return;
+            }
+            previousNumber = previousNumber / currentNumber;
             break;
         case "%":
-            display.textContent = 'Method implemention In progress';
+            previousNumber = previousNumber % currentNumber;
             break;
         default:
             console.log("No operator Selected");
             break;
     }
-    firstNumber = "";
-    secondNUmber = "";
-    operator ="";
+    previousNumber = roundNumber(previousNumber);
+    previousNumber = previousNumber.toString();
+    displayResult();
+
+}
+
+function roundNumber(number)
+{
+    return Math.round(number * 1000000)/1000000;
+}
+
+
+function displayResult()
+{
+
+
+    if(previousNumber.length<=11)
+    {
+        currentDisplayElement.textContent = previousNumber;
+    }
+    else
+    {
+        currentDisplayElement.textContent = previousNumber.slice(0,11) + '...';
+    }
+    previousDisplayElement.textContent = '';
+    operator = '';
+    currentNumber = '';
 }
 
 
 
-function buttonValve(e)
+function buttonValve(number)
 {
-    if(!operator)
+    if(previousNumber != "" && currentNumber != "" && operator === "")
     {
-        firstNumber += this.textContent;
-        display.textContent = firstNumber;
-        console.log(firstNumber);
+        previousNumber = '';
+        currentDisplayElement.textContent = currentNumber;
     }
-    else
-    {   
-        secondNUmber += this.textContent;
-        display.textContent = secondNUmber;
-        console.log(secondNUmber);
+    if(currentNumber.length<=11)
+    {      
+        currentNumber += number;
+        updatecurrentDisplay(currentNumber);
     }
    
 }
 
-function operatorSelect(e)
+function operatorSelect(selector)
 {
-    operator = this.textContent;
-    display.textContent = operator
-    console.log(operator);
+    if(previousNumber === "")
+    {
+        previousNumber = currentNumber;
+        previousNumber = currentNumber;
+        operatorCheck(selector);
+    }
+    else if(currentNumber === "")
+    {
+        operatorCheck(selector);
+    }
+    else
+    {
+        calulationOperator();
+        operator = selector;
+        currentDisplayElement.textContent = '0';
+        previousDisplayElement.textContent = previousNumber + " " + operator;
+    }
+}
+
+function operatorCheck(text)
+{
+    operator = text;
+    updatePreviousDisplay(previousNumber +' ' +operator);
+    currentNumber= '';
+    updatecurrentDisplay('');
 }
 
 function resetValues() {
-    firstNumber = '';
-    secondNumber = '';
+    currentNumber = '';
+    previousNumber = '';
     operator = '';
-    display.textContent = '';
+    updatePreviousDisplay('');
+    updatecurrentDisplay('0');
     
 }
 
+function updatecurrentDisplay(value) {
+    currentDisplayElement.textContent = value;
+}
 
-buttons.forEach(button => button.addEventListener('click',buttonValve));
-operators.forEach(operator => operator.addEventListener('click',operatorSelect));
-clearButton.addEventListener('click',resetValues)
-equal.addEventListener('click',function(){
-    calulationOperator(operator,firstNumber,secondNUmber)
+function updatePreviousDisplay(value)
+{
+    previousDisplayElement.textContent = value;
+}
 
-});
+function addDecimal()
+{
+    if(!currentNumber.includes('.'))
+    {
+        currentNumber += '.';
+        currentDisplayElement.textContent = currentNumber;
+    }
+}
+
+function removeValue()
+{
+    if(currentNumber!='')
+    {
+        currentNumber = currentNumber.slice(0,-1);
+        currentDisplayElement.textContent = currentNumber;
+        if(currentNumber === '')
+        {
+            currentDisplayElement.textContent = '0';
+        }
+
+    }
+    if(currentNumber === '' && previousNumber!=0 && operator ==='')
+    {
+        previousNumber = previousNumber.slice(0,-1);
+        currentDisplayElement.textContent = previousNumber;
+
+    }
+}
+
+
 

@@ -3,15 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/abbe921e74.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="./css/style.css">
     <title>Calculator</title>
 </head>
 <body>
     <div class="Heading">
-        <H2>Calculator</H2>
+        <h1>Calculator</h1>
     </div>
     <div class="container">
-        <div class="display"></div>
+        <div class="display">
+            <div class="previousDisplay"></div>
+            <div class="currentDisplay"></div>
+        </div>
         <div class="buttons">
         <button class="btn">0</button>
         <button class="btn">1</button>
@@ -27,8 +31,8 @@
         <button class="operator">-</button>
         <button class="operator">/</button>
         <button class="operator">*</button>
-        <button class="operator">%</button>
-        <button class="btn">+/-</button>
+        <button class="back"><i class='fas fa-backspace' style='font-size:24px'></i></button>
+        <button class="decimal">.</button>
         <button class="clear">AC</button>
         <button class="equal">=</button>
         </div>
